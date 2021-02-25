@@ -4,38 +4,55 @@ import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 
 import { observer } from "mobx-react-lite";
-import { Route, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
+import TestErrors from "../../features/errors/TestErrors";
+import { ToastContainer } from "react-toastify";
+import NotFound from "../../features/errors/NotFound";
+import ServerError from "../../features/errors/ServerError";
 
 function App() {
-  const location = useLocation();
+    const location = useLocation();
 
-  return (
-    // <> = shortcut version of using a Fragment which is like using a div but hides it from html
-    <>
-      <Route exact path="/" component={HomePage} />
-      <Route
-        exact
-        path={"/(.+)"}
-        render={() => (
-          <>
-            <NavBar />
-            <Container style={{ margin: "7em" }}>
-              <Route exact path="/activities" component={ActivityDashboard} />
-              <Route path="/activities/:id" component={ActivityDetails} />
-              <Route
-                key={location.key}
-                path={["/createActivity", "/manage/:id"]}
-                component={ActivityForm}
-              />
-            </Container>
-          </>
-        )}
-      />
-    </>
-  );
+    return (
+        // <> = shortcut version of using a Fragment which is like using a div but hides it from html
+        <>
+            <ToastContainer position="bottom-right" hideProgressBar />
+            <Route exact path="/" component={HomePage} />
+            <Route
+                exact
+                path={"/(.+)"}
+                render={() => (
+                    <>
+                        <NavBar />
+                        <Container style={{ margin: "7em" }}>
+                            <Switch>
+                                <Route
+                                    exact
+                                    path="/activities"
+                                    component={ActivityDashboard}
+                                />
+                                <Route
+                                    path="/activities/:id"
+                                    component={ActivityDetails}
+                                />
+                                <Route
+                                    key={location.key}
+                                    path={["/createActivity", "/manage/:id"]}
+                                    component={ActivityForm}
+                                />
+                                <Route path="/errors" component={TestErrors} />
+                                <Route path="/server-error" component={ServerError} />
+                                <Route component={NotFound} />
+                            </Switch>
+                        </Container>
+                    </>
+                )}
+            />
+        </>
+    );
 }
 
 export default observer(App);
