@@ -20,7 +20,7 @@ function ActivityDashboard() {
   }, [activityRegistry.size, loadActivities]);
 
 
-  if (activityStore.loadingInitial) return <LoadingComponent content="Loading app"  />
+  if (activityStore.loadingInitial) return <LoadingComponent content="Loading activities"  />
 
   return (
     /* semantic ui grid systeam has 16 unlike bootstraps 12 */
